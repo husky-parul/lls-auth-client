@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant User
+    participant FastAPI
+    participant Keycloak
+    participant LlamaStack
+    participant Ollama
+
+    User->>FastAPI: Send /api/invoke {prompt}
+    FastAPI->>Keycloak: Request token (client credentials)
+    Keycloak-->>FastAPI: JWT access_token
+    FastAPI->>LlamaStack: Forward prompt + JWT
+    LlamaStack->>Keycloak: Validate token via JWKS
+    Keycloak-->>LlamaStack: Token valid
+    LlamaStack->>Ollama: Inference request {prompt}
+    Ollama-->>LlamaStack: Model response
+    LlamaStack-->>FastAPI: Authenticated response
+    FastAPI-->>User: Final answer

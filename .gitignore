@@ -8,6 +8,9 @@ __pycache__/
 
 # Distribution / packaging
 ./.env
+uv.lock
+keycloak_setup.sh
+
 .Python
 build/
 develop-eggs/

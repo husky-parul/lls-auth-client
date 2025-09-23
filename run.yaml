@@ -1,0 +1,27 @@
+version: 2
+image_name: starter
+apis:
+  - inference
+
+providers:
+  inference:
+    - provider_id: ollama
+      provider_type: remote::ollama
+      config:
+        url: ${env.OLLAMA_URL:=http://host.containers.internal:11434}
+
+models:
+  - model_id: ${env.INFERENCE_MODEL:=llama3.2:3b}
+    provider_id: ollama
+    provider_model_id: ${env.INFERENCE_MODEL:=llama3.2:3b}
+    metadata: {}
+
+server:
+  port: ${env.LLAMA_STACK_PORT:=8321}
+  auth:
+    provider_config:
+      type: oauth2_token
+      jwks:
+        uri: ${env.KEYCLOAK_JWKS_URI:=http://localhost:8080/realms/lls-auth/protocol/openid-connect/certs}
+      issuer: ${env.KEYCLOAK_ISSUER:=http://localhost:8080/realms/lls-auth}
+      audience: ${env.KEYCLOAK_AUDIENCE:=lls-client}
